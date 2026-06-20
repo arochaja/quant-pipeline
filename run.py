@@ -16,14 +16,16 @@ To change what gets tested, edit the CONFIG block below.
 
 from data.loaders import get_prices
 from strategies.sma_crossover import SMACrossover
+from strategies.ema_crossover import EMACrossover
 from backtest.engine import run_backtest
 from backtest.metrics import summarize
+
 
 
 # --------------------------------------------------------------------------
 # CONFIG — edit these to run a different backtest.
 # --------------------------------------------------------------------------
-TICKER = "GM"
+TICKER = "AAPL"
 START = "2023-01-01"
 END = "2024-01-01"
 
@@ -37,7 +39,7 @@ def main() -> None:
     """Orchestrate one backtest and print a scorecard. Stays thin by design."""
     # 1-3. Run the pipeline.
     prices = get_prices(TICKER, START, END)
-    strat = SMACrossover(fast=FAST, slow=SLOW)
+    strat = EMACrossover(fast=FAST, slow=SLOW)
     results = run_backtest(prices, strat, cost_per_trade_bps=COST_BPS)
 
     # 4. Performance & risk metrics.
@@ -52,7 +54,7 @@ def main() -> None:
     print("=" * 52)
     print(f"  Ticker        : {TICKER}")
     print(f"  Period        : {START}  ->  {END}")
-    print(f"  Strategy      : SMA crossover ({FAST}/{SLOW})")
+    print(f"  Strategy      : EMA crossover ({FAST}/{SLOW})")
     print(f"  Cost per trade: {COST_BPS:.1f} bps")
     print("-" * 52)
     print(f"  Total return  : {stats['total_return']:+.2%}")
