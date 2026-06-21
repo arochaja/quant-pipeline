@@ -29,7 +29,6 @@ def _cache_path(ticker: str, start: str, end: str) -> Path:
     TODO:
       - Return a Path inside CACHE_DIR.
       - Suggested name: f"{ticker}_{start}_{end}.parquet"
-      - Think: should ticker be uppercased so 'aapl' and 'AAPL' share a cache?
     """
 
     return CACHE_DIR / f"{ticker.upper()}_{start}_{end}.parquet"  

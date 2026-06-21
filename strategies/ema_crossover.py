@@ -10,10 +10,13 @@ class EMACrossover(Strategy):
             raise ValueError("Fast window is capturing more than small window")
 
     def generate_signals(self, data: pd.DataFrame) -> pd.Series:
+        if "close" not in data.columns:
+            raise ValueError(f"Expected 'close' column, got: {list(data.columns)}")
+        
         fast_ma = data["close"].ewm(span=self.fast).mean()
         slow_ma = data["close"].ewm(span=self.slow).mean()
-        signal = (fast_ma > slow_ma).astype(float)
-
+        
+        signal = (fast_ma > slow_ma).astype(float).fillna(0)
         return signal
 
 if __name__ == "__main__":
@@ -24,5 +27,5 @@ if __name__ == "__main__":
 
     signals = strat.get_signals(prices)
 
-    print(signals.value_counts)
+    print(signals.value_counts())
     print(signals.tail())

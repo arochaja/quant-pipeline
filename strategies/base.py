@@ -28,7 +28,8 @@ class Strategy(ABC):
         """Public entry point: calls the strategy, then validates."""
         signals = self.generate_signals(data)
         if not signals.between(-1, 1).all():
-            raise ValueError("Signals must be in [-1, 1]")
+            raise ValueError(f"Signals must be in [-1, 1]. VALUES: {signals.value_counts()}")
+
         if not signals.index.equals(data.index):
             raise ValueError("Signal index must match data index")
         return signals
